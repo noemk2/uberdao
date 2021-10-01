@@ -1,4 +1,13 @@
-💻 Introducción a Aval Comunitario
+🚕 Introducción a uberDao 🚕
+==================
+[Video Demo]
+
+uberDao es un smart contract escrito bajo el protocolo NEAR que permite:
+ - Guardar el historial de viajes de una persona
+ - Crear propuesta y votar
+
+
+🚕 🚙Introducción a uberdao 🚗
 ==================
 
  Aval Comunitario es un smart contract escrito bajo el protocolo NEAR que permite:
@@ -40,11 +49,13 @@ Step 3: Clonar Repositorio
 Este comando nos permite clonar el repositorio de nuestro proyecto MINGA
 
 ```bash
+git clone https://github.com/noemk2/uberdao.git
 git clone https://github.com/fintechlab-la/minga_avalcomunitario_nearProtocol.git
 ```
 
 Una vez que hayas descargado el repositorio, asegurate de ejecutar los comandos dentro del repositorio descargado. Puedes hacerlo con
 ```bash
+cd uberdao/
 cd minga_avalcomunitario_nearProtocol/
 ```
 
@@ -69,27 +80,33 @@ usarlo más tarde)
 ¡Felicitaciones, ahora tendrá un entorno de desarrollo local ejecutándose en NEAR TestNet!
 
 
-✏️ Comando para CREAR un proyecto para ser avalado
+✏️ Comando para CREAR unn Solicitud de Viaje
 -----------------------------------------------
 
 Permite crear un proyecto que ha sido revisado para entrar a la red de proyectos colaborativos para ser avalados de manera distribuida.
 
+Permite crear una solicitud de viaje para el usuario
+
 Para Linux:
 ```bash
-near call <your deployed contract> createProject '{"title":"string","description":"string"}' --account-id <username>.testnet
+near call <your deployed contract> createTravel '{"traveler":"string","route":"string"}' --account-id <username>.testnet
 ```
 Para windows:
 ```bash
-near call <your deployed contract> createProject "{\"title\": \"string\",\"description\":\"string\"}" --account-id <username>.testnet
+near call <your deployed contract> createTravel "{\"traveler\": \"string\",\"route\":\"string\"}" --account-id <username>.testnet
 ```
 ✏️ Comando que LISTA todos los proyectos:
 --------------------------------------------
 
-Permite listar los proyectos que existen en nuestro contrato inteligente. Antes de ejecutar el comando brindado, modifica <your deployed contract> por el número de contrato generado. Por ejemplo: 'dev-1630622185346-59088620194720'. Además, modifica <username> por tu nombre de usuario en testnet. Por ejemplo: 'aval1'
+Permite listar las solicitudes de viaje que existen en nuestro contrato inteligente. 
+
+Antes de ejecutar el comando brindado: 
+ - modifica <your deployed contract> por el número de contrato generado. Por ejemplo: 'dev-1630622185346-59088620194720'.
+ - modifica <username> por tu nombre de usuario en testnet. Por ejemplo: 'aval1'
 
 Para Linux y Windows:
 ```bash
-near view <your deployed contract> getProjects --account-id <username>.testnet
+near view <your deployed contract> getTravelRequest --account-id <username>.testnet
 ```
 
 ✏️ Comando para ELIMINAR un proyecto
@@ -99,11 +116,11 @@ Permite eliminar un proyecto que ya no pertenece a la red y se da de baja.
 
 Para Linux:
 ```bash
-near call <your deployed contract> eliminateProject '{"id":1}' --account-id <username>.testnet
+near call <your deployed contract> eliminateTravelRequest '{"id":1}' --account-id <username>.testnet
 ``` 
 Para Windows:
 ```bash
-near call <your deployed contract> eliminateProject "{\"id\":<id de proyecto>}" --account-id <username>.testnet
+near call <your deployed contract> eliminateTravelRequest "{\"id\":<id de proyecto>}" --account-id <username>.testnet
 ```
 ✏️ Comando para AVALAR un proyecto
 --------------------------------------------
@@ -136,7 +153,7 @@ near call <your deployed contract> changeStatus "{\"id\":<id de proyecto>}" --ac
 🤖 Test 
 ==================
 
-Las pruebas son parte del desarrollo, luego, para ejecutar las pruebas en el contrato inteligente comunitario, debe ejecutar el siguiente comando:
+Las pruebas son parte del desarrollo, luego, para ejecutar las pruebas en el contrato inteligente , debe ejecutar el siguiente comando:
 
     yarn test
 
@@ -149,7 +166,7 @@ near call <your deployed contract> hello --account-id <username>.testnet
 ```
 
 
-👩🏼‍🏫 Exploring and Explaining The Code 
+📂‍🗃️ Exploring and Explaining The Code 
 ====================================
 This is a explanation of the smart contract file system
 
@@ -157,31 +174,45 @@ This is a explanation of the smart contract file system
 ├── README.md                                       # this file
 ├── as-pect.config.js                               # configuration for as-pect (AssemblyScript unit testing)
 ├── asconfig.json                                   # configuration file for Assemblyscript compiler
-├── assembly
-│   ├── __tests__
-│   │   ├── as-pect.d.ts                            # as-pect unit testing headers for type hints
-│   │   └── main.spec.ts                            # unit test for the contract
-│   ├── as_types.d.ts                               # AssemblyScript headers for type hint
-│   ├── index.ts                                    # contains the smart contract code
-│   ├── models.ts                                   # contains code for the models accesible to the smart contract
-│   └── tsconfig.json                               # Typescript configuration file
+├── src
+│     ├── viajes                         <-- viajes contract
+│     │   ├── README.md
+│     │   ├── __tests__
+│     │   │   ├── README.md
+│     │   │   └── index.unit.spec.ts
+│     │   └── assembly
+│     │       ├── index.ts
+│     │       └── models.ts
+│     ├── dao                       <-- dao contract
+│     │   ├── README.md
+│     │   ├── __tests__
+│     │   │   ├── README.md
+│     │   │   └── index.unit.spec.ts
+│     │   └── assembly
+│     │       ├── index.ts
+│     │       └── models.ts
+│     └── utils.ts                      <-- shared contract code
+│ 
 ├── neardev
 │   ├── dev-account                                 #in this file the provisional deploy smart contract account is saved
 │   └── dev-account.env                             #in this file the provisional deploy smart contract account is saved like a environment variable                             
-├── out
-│   └── main.wasm                                   # compiled smart contract code using to deploy
+│
+├── build 
+│   └── release                                    
+│       ├── dao.wasm                               # compiled smart contract code using to deploy
+│       └── viajes.wasm                            # compiled smart contract code using to deploy
+│ 
 ├── package-lock.json                               # project manifest lock version
 ├── package.json                                    # Node.js project manifest (scripts and dependencies)
 └── yarn.lock                                       # project manifest lock version
 ```
-1. El código de contrato inteligente vive en la carpeta `/assambly` folder.
+1. El código de los contrato inteligentes vive en la carpeta `/src` folder.
 2. Para realizar una implementación de prueba, use los scripts en el `/package.json` file.
 
 
 
-👌 Gracias por tomar interés en nuestro Proyecto
+🙏 Gracias por su tiempo 
 ==============================================
-
 Aquí dejamos una propuesta de diseño [UX/UI] para desarrollar la parte frontend del proyecto comunitario. 
 
 
@@ -192,4 +223,6 @@ Aquí dejamos una propuesta de diseño [UX/UI] para desarrollar la parte fronten
   [near-cli]: https://github.com/near/near-cli
   [NEAR test account]: https://docs.near.org/docs/develop/basics/create-account#creating-a-testnet-account
   [nvm]: https://github.com/nvm-sh/nvm
+  [UX/UI]: https://www.figma.com/proto/GqP5EF5zRZRvAv3HoaSsuN/uniwap?node-id=39%3A2300&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=39%3A2300&hide-ui=1
   [UX/UI]: https://www.figma.com/proto/0dZLC0WI1eVsfjeKu3T8J8/Garant%C3%ADzame?node-id=2%3A8&scaling=scale-down-width&page-id=0%3A1&starting-point-node-id=2%3A8
+  [Video Demo]: https://www.loom.com/share/c3b906012b7e4c32a2250929caab64ec?sharedAppSource=personal_library
