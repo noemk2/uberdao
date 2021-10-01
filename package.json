@@ -1,0 +1,24 @@
+{
+	"name": "uber_dao",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "watch -d -n 1 'clear && yarn test:unit'",
+		"asp": "asp --verbose --nologo",
+		"test:unit": "yarn asp -f unit.spec",
+		"build": "asb --target debug",
+		"build:release": "asb",
+		"test": "yarn build:release && yarn test:unit && yarn test:simulate",
+		"test:simulate": "cargo test -- --nocapture",
+		"clean": "rm -rf ./build",
+		"test:debug": "node --inspect-brk ./node_modules/.bin/asp"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/jest": "^27.0.2",
+		"near-sdk-as": "^3.2.3"
+	}
+}
