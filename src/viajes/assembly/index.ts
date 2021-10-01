@@ -28,26 +28,6 @@ export function getTravelRequest(): Array<TravelRequest> {
 	return result;
 }
 
-//aumenta un numero 
-//export function avalProject(
-//id: i32,
-//amount: i32,
-//): TravelRequest {
-//assert(<i32>amount > 0, "debes incluir al menos 1 near")
-//let project = requests[id]
-//project.avalCount += amount
-//requests.replace(<i32>id, project)
-//return project
-//}
-
-//cambia el estado
-//export function changeStatus(id: i32): TravelRequest {
-//let project = requests[id]
-//project.status = Status.goal_reached
-//requests.replace(<i32>id, project)
-//return project
-//}
-
 export function eliminateTravelRequest(id: i32): void {
 	assert(id >= 0, "No tenemos contratos con id negativos")
 	requests.swap_remove(<i32>id)
