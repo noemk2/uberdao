@@ -6,7 +6,7 @@ import {
 	PersistentSet
 } from "near-sdk-as";
 
-import {MEME_KEY, PAGE_SIZE, Category, AccountId, Money, Timestamp} from "../../utils";
+import {MEME_KEY, PAGE_SIZE, AccountId, Money, Timestamp} from "../../utils";
 
 @nearBindgen
 export class Comment {
@@ -39,7 +39,7 @@ export class Donation {
 }
 
 @nearBindgen
-export class Meme {
+export class Proposal {
 	creator: AccountId = context.predecessor;
 	created_at: Timestamp = context.blockTimestamp;
 	vote_score: i32 = 0;
@@ -47,8 +47,8 @@ export class Meme {
 
 	constructor(
 		public title: string,
-		public data: string,
-		public category: Category,
+		public propose: string,
+		//public category: Category,
 	) {}
 
 
@@ -56,20 +56,20 @@ export class Meme {
 	// Basic functions
 	// ----------------------------------------------------------------------------
 
-	static create(title: string, data: string, category: Category): void {
+	static create(title: string, data: string): void {
 		// data has to have identifier from valid content provider
-		assert(is_valid_meme_data(data), "Data is not valid, must start with valid 9gag.com URL")
+		//assert(is_valid_meme_data(data), "Data is not valid, must start with valid 9gag.com URL")
 
 		// save the meme to storage
-		const meme = new Meme(title, data, category)
+		const meme = new Proposal(title, data)
 		this.set(meme)
 	}
 
-	static get(): Meme {
-		return storage.getSome<Meme>(MEME_KEY)
+	static get(): Proposal {
+		return storage.getSome<Proposal>(MEME_KEY)
 	}
 
-	static set(meme: Meme): void {
+	static set(meme: Proposal): void {
 		storage.set(MEME_KEY, meme)
 	}
 
