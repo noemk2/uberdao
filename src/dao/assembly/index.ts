@@ -2,12 +2,13 @@ import {
 	u128,
 	context,
 	storage,
-	logging,
-	ContractPromiseBatch,
+	//logging,
+	//ContractPromiseBatch,
 } from "near-sdk-as";
 
-import {MEME_KEY, XCC_GAS, MIN_ACCOUNT_BALANCE, MAX_COMMENT_LENGTH, AccountId} from "../../utils";
-import {Comment, Vote, Proposal, Donation} from "./models";
+//import {MEME_KEY, XCC_GAS, MIN_ACCOUNT_BALANCE, MAX_COMMENT_LENGTH, AccountId} from "../../utils";
+import {MEME_KEY, MIN_ACCOUNT_BALANCE, MAX_COMMENT_LENGTH} from "../../utils";
+import {Comment, Vote, Proposal} from "./models";
 
 /**
  * == PUBLIC METHODS ==========================================================
@@ -22,7 +23,7 @@ import {Comment, Vote, Proposal, Donation} from "./models";
  * @param data the data containing some unique identifier of the meme used for rendering
  * @param category the category of the meme
  */
-export function init(title: string, data: string): void {
+export function init(title: string, propose: string): void {
 	// contract may only be initialized once
 	assert(!is_initialized(), "Contract is already initialized.");
 
@@ -36,7 +37,7 @@ export function init(title: string, data: string): void {
 	assert(title.length > 0, "Meme title may not be blank");
 
 	// create the meme using incoming metadata
-	Proposal.create(title, data)
+	Proposal.create(title, propose)
 }
 
 /**
@@ -128,29 +129,29 @@ export function get_recent_comments(): Array<Comment> {
 /**
  * Donate tokens to the contract
  */
-export function donate(): void {
-	assert_contract_is_initialized()
-	assert(context.sender == context.predecessor, "Users must donate directly")
-	assert(context.attachedDeposit > u128.Zero, "Donor must attach some money")
+//export function donate(): void {
+//assert_contract_is_initialized()
+//assert(context.sender == context.predecessor, "Users must donate directly")
+//assert(context.attachedDeposit > u128.Zero, "Donor must attach some money")
 
-	Proposal.add_donation()
-}
+//Proposal.add_donation()
+//}
 
 /**
  * Get a list of donations
  */
-export function get_donations_total(): u128 {
-	assert_contract_is_initialized()
-	return Proposal.get().total_donations
-}
+//export function get_donations_total(): u128 {
+//assert_contract_is_initialized()
+//return Proposal.get().total_donations
+//}
 
 /**
  * Get a list o recent comments
  */
-export function get_recent_donations(): Array<Donation> {
-	assert_contract_is_initialized()
-	return Proposal.recent_donations()
-}
+//export function get_recent_donations(): Array<Donation> {
+//assert_contract_is_initialized()
+//return Proposal.recent_donations()
+//}
 
 
 /**
@@ -158,22 +159,22 @@ export function get_recent_donations(): Array<Donation> {
  *
  * @param account NEAR account to receive donations after release
  */
-export function release_donations(account: AccountId): void {
-	assert_contract_is_initialized()
-	assert_signed_by_creator()
+//export function release_donations(account: AccountId): void {
+//assert_contract_is_initialized()
+//assert_signed_by_creator()
 
-	// transfer funds to provided account and call ourselves back once transfer is complete
-	ContractPromiseBatch.create(account)
-		.transfer(Proposal.get().total_donations)
-		.then(context.contractName).function_call("on_donations_released", "{}", u128.Zero, XCC_GAS)
-}
+//// transfer funds to provided account and call ourselves back once transfer is complete
+//ContractPromiseBatch.create(account)
+//.transfer(Proposal.get().total_donations)
+//.then(context.contractName).function_call("on_donations_released", "{}", u128.Zero, XCC_GAS)
+//}
 
 /**
  * Callback method invoked once donation release is complete
  */
-export function on_donations_released(): void {
-	logging.log("Donations were released")
-}
+//export function on_donations_released(): void {
+//logging.log("Donations were released")
+//}
 
 /**
  * == PRIVATE FUNCTIONS ========================================================

@@ -2,21 +2,17 @@
 ==================
 [Video Demo]
 
-uberDao es un smart contract escrito bajo el protocolo NEAR que permite:
- - Guardar el historial de viajes de una persona
- - Crear propuesta y votar
-
 
 🚕 🚙Introducción a uberdao 🚗
 ==================
 
- Aval Comunitario es un smart contract escrito bajo el protocolo NEAR que permite:
+ uberdao es un smart contract escrito bajo el protocolo NEAR que permite:
  
- 1. Crear un proyecto.
- 2. Obtener una lista de los proyectos que se han creado.
- 3. Avalar un proyecto.
+ 1. Crear solicitud de viaje.
+ 2. Obtener una lista de las solicitudes de viajes que se han creado.
+ 3. Votar por una propuesta.
  4. Cambiar el status de un proyecto.
- 5. Eliminar un proyecto.
+ 5. Eliminar de la lista las solicitudes de viaje.
  
 
 👨‍💻 Instalación en local
@@ -95,7 +91,8 @@ Para windows:
 ```bash
 near call <your deployed contract> createTravel "{\"traveler\": \"string\",\"route\":\"string\"}" --account-id <username>.testnet
 ```
-✏️ Comando que LISTA todos los proyectos:
+
+✏️ Comando que LISTAR todas las solicitudes de viaje
 --------------------------------------------
 
 Permite listar las solicitudes de viaje que existen en nuestro contrato inteligente. 
@@ -109,10 +106,10 @@ Para Linux y Windows:
 near view <your deployed contract> getTravelRequest --account-id <username>.testnet
 ```
 
-✏️ Comando para ELIMINAR un proyecto
+✏️ Comando para ELIMINAR una solicitud de viaje
 --------------------------------------------
 
-Permite eliminar un proyecto que ya no pertenece a la red y se da de baja.
+Permite eliminar una solicitud que ya no pertenece a la red y se da de baja.
 
 Para Linux:
 ```bash
@@ -122,33 +119,153 @@ Para Windows:
 ```bash
 near call <your deployed contract> eliminateTravelRequest "{\"id\":<id de proyecto>}" --account-id <username>.testnet
 ```
-✏️ Comando para AVALAR un proyecto
+
+## Para poder votar 
+
+✏️ desplegar contrato /build/release/dao.wasm previamente compilado
+
+```bash
+near dev-deploy --wasmFile ./build/release/dao.wasm
+```
+✏️ recuerda 
+Antes de ejecutar el comando brindado: 
+ - modifica <your deployed contract> por el número de contrato generado. Por ejemplo: 'dev-1630622185346-59088620194720'.
+ - modifica <username> por tu nombre de usuario en testnet. Por ejemplo: 'aval1'
+
+✏️ Inicializamos y creamos una propuesta
 --------------------------------------------
 
-Permite dar la confianza comunitaria (avalar) a un proyecto mediante la distribución de near.
+`init(title: string, data: string, category: Category): void`
 
-Para Linux:
-```bash
-near call <your deployed contract> avalProject '{"id":<id de proyecto>, "amount":<cantidad de near en números>}' --account-id <username>.testnet
-```
-Para Windows:
-```bash
-near call <your deployed contract> avalProject "{\"id\":<id de proyecto>, \"amount\":<cantidad de near en números>}" --account-id <username>.testnet
+```sh
+# anyone can initialize meme (so this must be done by the museum at deploy-time)
+near call dev-1614603380541-7288163 init '{"title": "hello world", "propose": "I want ...", "category": 0}' --account_id dev-1614603380541-7288163 --amount 3
 ```
 
-✏️ Comando para CAMBIAR EL ESTADO de un proyecto
-------------------------------------------------
+✏️ Ver la propuesta
+--------------------------------------------
 
-Permite cambiar el estado de un proyecto de avalado y que finalmente accedio a un préstamo debido al aval comunitario.
+`get_proposal(): Proposal`
 
-Para Linux:
-```bash
-near call <your deployed contract> changeStatus '{"id":1}' --account-id <username>.testnet
+```sh
+# anyone can read proposal metadata
+near view dev-1614603380541-7288163 get_proposal
 ```
-Para windows: 
-```bash
-near call <your deployed contract> changeStatus "{\"id\":<id de proyecto>}" --account-id <username>.testnet
+
+```js
+{
+  creator: 'dev-1614603380541-7288163',
+  created_at: '1614603702927464728',
+  vote_score: 4,
+  total_donations: '0',
+  title: 'hello world',
+  propose: 'I want ...',
+  category: 0
+}
 ```
+
+
+
+
+✏️ Comando para ver votos recientes
+--------------------------------------------
+
+```sh
+near view dev-1614603380541-7288163 get_recent_votes
+```
+
+```js
+[
+  {
+    created_at: '1614603886399296553',
+    value: 1,
+    voter: 'dev-1614603380541-7288163'
+  },
+  {
+    created_at: '1614603988616406809',
+    value: 1,
+    voter: 'sherif.testnet'
+  },
+  {
+    created_at: '1614604214413823755',
+    value: 2,
+    voter: 'batch-dev-1614603380541-7288163'
+  },
+  [length]: 3
+]
+```
+
+
+✏️ Ver la calificacion de la propuesta
+--------------------------------------------
+
+`get_vote_score(): i32`
+
+```sh
+near view dev-1614603380541-7288163 get_vote_score
+```
+
+```js
+4
+```
+
+
+
+✏️ Comando para votar un propuesta
+--------------------------------------------
+
+`vote(value: i8): void`
+
+```sh
+# user votes for meme
+near call dev-1614603380541-7288163 vote '{"value": 1}' --account_id sherif.testnet
+```
+
+
+
+✏️ Comando para votar en lotes un propuesta
+--------------------------------------------
+
+`batch_vote(value: i8, is_batch: bool = true): void`
+
+```sh
+# only the meme contract can call this method
+near call dev-1614603380541-7288163 batch_vote '{"value": 2}' --account_id dev-1614603380541-7288163
+```
+
+
+
+✏️ Comando para agregar un comentario a un propuesta
+--------------------------------------------
+
+`add_comment(text: string): void`
+
+```sh
+near call dev-1614603380541-7288163 add_comment '{"text":"i love this meme"}' --account_id sherif.testnet
+```
+
+
+✏️ Comando para ver los comentarios recientes
+--------------------------------------------
+
+
+`get_recent_comments(): Array<Comment>`
+
+```sh
+near view dev-1614603380541-7288163 get_recent_comments
+```
+
+```js
+[
+  {
+    created_at: '1614604543670811624',
+    author: 'sherif.testnet',
+    text: 'i love this meme'
+  },
+  [length]: 1
+]
+```
+
 
 🤖 Test 
 ==================

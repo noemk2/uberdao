@@ -43,7 +43,7 @@ export class Proposal {
 	creator: AccountId = context.predecessor;
 	created_at: Timestamp = context.blockTimestamp;
 	vote_score: i32 = 0;
-	total_donations: u128 = u128.Zero;
+	//total_donations: u128 = u128.Zero;
 
 	constructor(
 		public title: string,
@@ -117,24 +117,24 @@ export class Proposal {
 	// ----------------------------------------------------------------------------
 	// Donations
 	// ----------------------------------------------------------------------------
-	static add_donation(): void {
-		// fetch meme from storage
-		const meme = this.get()
-		// record the donation
-		meme.total_donations = u128.add(meme.total_donations, context.attachedDeposit);
-		// save it back to storage
-		this.set(meme)
-		// add the new Donation
-		donations.push(new Donation())
-	}
+	//static add_donation(): void {
+	//// fetch meme from storage
+	//const meme = this.get()
+	//// record the donation
+	//meme.total_donations = u128.add(meme.total_donations, context.attachedDeposit);
+	//// save it back to storage
+	//this.set(meme)
+	//// add the new Donation
+	//donations.push(new Donation())
+	//}
 
-	static get_donations_count(): u32 {
-		return donations.length
-	}
+	//static get_donations_count(): u32 {
+	//return donations.length
+	//}
 
-	static recent_donations(count: i32 = PAGE_SIZE): Donation[] {
-		return donations.get_last(count)
-	}
+	//static recent_donations(count: i32 = PAGE_SIZE): Donation[] {
+	//return donations.get_last(count)
+	//}
 }
 
 /**
@@ -177,4 +177,4 @@ class Vector<T> extends PersistentVector<T> {
 const comments = new Vector<Comment>("c");
 const votes = new Vector<Vote>("v");
 const voters = new PersistentSet<AccountId>("vs");
-const donations = new Vector<Donation>("d");
+//const donations = new Vector<Donation>("d");
