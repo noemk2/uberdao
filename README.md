@@ -135,11 +135,11 @@ Antes de ejecutar el comando brindado:
 ✏️ Inicializamos y creamos una propuesta
 --------------------------------------------
 
-`init(title: string, data: string, category: Category): void`
+`init(title: string, data: string): void`
 
 ```sh
 # anyone can initialize meme (so this must be done by the museum at deploy-time)
-near call dev-1614603380541-7288163 init '{"title": "hello world", "propose": "I want ...", "category": 0}' --account_id dev-1614603380541-7288163 --amount 3
+near call dev-1614603380541-7288163 init '{"title": "hello world", "propose": "I want ..."}' --account_id dev-1614603380541-7288163 --amount 3
 ```
 
 ✏️ Ver la propuesta
@@ -160,7 +160,6 @@ near view dev-1614603380541-7288163 get_proposal
   total_donations: '0',
   title: 'hello world',
   propose: 'I want ...',
-  category: 0
 }
 ```
 
