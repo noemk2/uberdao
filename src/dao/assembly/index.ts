@@ -21,7 +21,6 @@ import {Comment, Vote, Proposal} from "./models";
  *
  * @param title the name of the meme
  * @param data the data containing some unique identifier of the meme used for rendering
- * @param category the category of the meme
  */
 export function init(title: string, propose: string): void {
 	// contract may only be initialized once
