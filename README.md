@@ -42,17 +42,15 @@ Configura tu near-cli para autorizar su cuenta de prueba creada recientemente:
 Step 3: Clonar Repositorio
 -------------------------------    
 
-Este comando nos permite clonar el repositorio de nuestro proyecto MINGA
+Este comando nos permite clonar el repositorio de nuestro proyecto 
 
 ```bash
 git clone https://github.com/noemk2/uberdao.git
-git clone https://github.com/fintechlab-la/minga_avalcomunitario_nearProtocol.git
 ```
 
 Una vez que hayas descargado el repositorio, asegurate de ejecutar los comandos dentro del repositorio descargado. Puedes hacerlo con
 ```bash
 cd uberdao/
-cd minga_avalcomunitario_nearProtocol/
 ```
 
 Step 4: Realiza el BUILD para implementación de desarrollo de contrato inteligente 
@@ -64,7 +62,7 @@ Instale el gestor de dependencia de Node.js dentro del repositorio
 npm install
 ```
 
-Cree el código de contrato inteligente MINGA AVAL COMUNITARIO e implemente el servidor de desarrollo local: 
+Cree el código de contrato inteligente e implemente el servidor de desarrollo local: 
 ```bash
 yarn deploy:dev
 ```
